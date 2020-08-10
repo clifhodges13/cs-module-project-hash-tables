@@ -22,6 +22,8 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        self.capacity = capacity
+        self.hash_table = [None] * self.capacity
 
 
     def get_num_slots(self):
@@ -35,6 +37,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.capacity
 
 
     def get_load_factor(self):
@@ -44,6 +47,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        non_null_entries = 0
+        for item in self.hash_table:
+            if item != None:
+                non_null_entries += 1
+        return non_null_entries / self.capacity
 
 
     def fnv1(self, key):
@@ -63,6 +71,11 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for char in key:
+            hash = (( hash << 5) + hash) + ord(char)
+        return hash & 0xFFFFFFFF
+
 
 
     def hash_index(self, key):
@@ -83,6 +96,19 @@ class HashTable:
         """
         # Your code here
 
+        # If the key already exists,
+            # Replace the value
+        # Else,
+            # Add new HashTableEntry to the head of the Linked List
+
+        # index = self.hash_index(key)
+        # if self.hash_table[index] != None:
+        #     cur = HashTableEntry(key, self.hash_table[index])
+        #     cur.next = HashTableEntry(key, value)
+        # else:
+        #     self.hash_table[index] = value
+        # return
+
 
     def delete(self, key):
         """
@@ -93,6 +119,12 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        if self.hash_table[index]:
+            self.hash_table[index] = None
+            return
+        else:
+            print(f'Error: "{key}" not found in table.')
 
 
     def get(self, key):
@@ -104,6 +136,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+        if self.hash_table[index]:
+            return self.hash_table[index]
+        else:
+            return None
 
 
     def resize(self, new_capacity):
@@ -114,6 +151,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # self.capacity = new_capacity
 
 
 
@@ -141,8 +179,10 @@ if __name__ == "__main__":
 
     # Test resizing
     old_capacity = ht.get_num_slots()
+    print(old_capacity)
     ht.resize(ht.capacity * 2)
     new_capacity = ht.get_num_slots()
+    print(new_capacity)
 
     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
