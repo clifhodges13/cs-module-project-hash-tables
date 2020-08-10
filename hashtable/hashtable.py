@@ -96,6 +96,11 @@ class HashTable:
         """
         # Your code here
 
+        # Day 1
+        # self.hash_table[self.hash_index(key)] = value
+        # return value
+
+        # Day 2
         # If the key already exists,
             # Replace the value
         # Else,
@@ -119,12 +124,22 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        index = self.hash_index(key)
-        if self.hash_table[index]:
-            self.hash_table[index] = None
-            return
-        else:
-            print(f'Error: "{key}" not found in table.')
+
+        # Day 1
+        # index = self.hash_index(key)
+        # if self.hash_table[index]:
+        #     self.hash_table[index] = None
+        #     return
+        # else:
+        #     print(f'Error: "{key}" not found in table.')
+
+        # Day 2
+        # Get the Linked List at the hashed index
+        # Search through the Linked List for the key
+        # If it exists,
+            # Return the value
+        # else,
+            # Return None
 
 
     def get(self, key):
