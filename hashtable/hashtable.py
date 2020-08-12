@@ -102,15 +102,26 @@ class HashTable:
 
         # Day 2
         index = self.hash_index(key)
-        # If the key already exists,
-        if self.hash_table[index] != None:
-            # Replace the value
-            self.hash_table[index] = HashTableEntry(key, value)
-            self.hash_table[index].next = HashTableEntry(key, value)
+        current = self.hash_table[index]
+        # If a key already exists,
+        if current != None:
+            print(current)
+            # if the key is equal to the key passed:
+            while current.next != None:
+                if current.key == key:
+                    # replace the value
+                    current.value = value
+                    return current.value
+                else:
+                    current = current.next
+            # Create a new node and place it after the current node
+            current.next = HashTableEntry(key, value)
         # Else,
         else:
             # Add new HashTableEntry to the head of the Linked List
-            self.hash_table[index] = HashTableEntry(key, value)
+            current = HashTableEntry(key, value)
+        
+        return current.value
 
 
     def delete(self, key):
@@ -124,12 +135,12 @@ class HashTable:
         # Your code here
 
         # Day 1
-        # index = self.hash_index(key)
-        # if self.hash_table[index]:
-        #     self.hash_table[index] = None
-        #     return
-        # else:
-        #     print(f'Error: "{key}" not found in table.')
+        index = self.hash_index(key)
+        if self.hash_table[index]:
+            self.hash_table[index] = None
+            return
+        else:
+            print(f'Error: "{key}" not found in table.')
 
         # Day 2
         # Get the Linked List at the hashed index
@@ -150,10 +161,19 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        if self.hash_table[index]:
-            return self.hash_table[index]
-        else:
-            return None
+        # print(index)
+        current = self.hash_table[index]
+
+        if current == None:
+            return False
+        elif current.key == key:
+            return current.key
+        elif current != None:
+            while current.next != None:
+                if current.key == key:
+                    return current.key
+                else:
+                    current = current.next
 
 
     def resize(self, new_capacity):
@@ -164,43 +184,43 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        # self.capacity = new_capacity
+        self.capacity = new_capacity
 
 
 
-# if __name__ == "__main__":
-#     ht = HashTable(8)
+if __name__ == "__main__":
+    ht = HashTable(8)
 
-#     ht.put("line_1", "'Twas brillig, and the slithy toves")
-#     ht.put("line_2", "Did gyre and gimble in the wabe:")
-#     ht.put("line_3", "All mimsy were the borogoves,")
-#     ht.put("line_4", "And the mome raths outgrabe.")
-#     ht.put("line_5", '"Beware the Jabberwock, my son!')
-#     ht.put("line_6", "The jaws that bite, the claws that catch!")
-#     ht.put("line_7", "Beware the Jubjub bird, and shun")
-#     ht.put("line_8", 'The frumious Bandersnatch!"')
-#     ht.put("line_9", "He took his vorpal sword in hand;")
-#     ht.put("line_10", "Long time the manxome foe he sought--")
-#     ht.put("line_11", "So rested he by the Tumtum tree")
-#     ht.put("line_12", "And stood awhile in thought.")
+    ht.put("line_1", "'Twas brillig, and the slithy toves")
+    ht.put("line_2", "Did gyre and gimble in the wabe:")
+    ht.put("line_3", "All mimsy were the borogoves,")
+    ht.put("line_4", "And the mome raths outgrabe.")
+    ht.put("line_5", '"Beware the Jabberwock, my son!')
+    ht.put("line_6", "The jaws that bite, the claws that catch!")
+    ht.put("line_7", "Beware the Jubjub bird, and shun")
+    ht.put("line_8", 'The frumious Bandersnatch!"')
+    ht.put("line_9", "He took his vorpal sword in hand;")
+    ht.put("line_10", "Long time the manxome foe he sought--")
+    ht.put("line_11", "So rested he by the Tumtum tree")
+    ht.put("line_12", "And stood awhile in thought.")
 
-#     print("")
+    # print("")
 
-#     # Test storing beyond capacity
-#     for i in range(1, 13):
-#         print(ht.get(f"line_{i}"))
+    # # Test storing beyond capacity
+    for i in range(1, 13):
+        print(ht.get(f"line_{i}"))
 
-#     # Test resizing
-#     old_capacity = ht.get_num_slots()
-#     print(old_capacity)
-#     ht.resize(ht.capacity * 2)
-#     new_capacity = ht.get_num_slots()
-#     print(new_capacity)
+    # # Test resizing
+    # old_capacity = ht.get_num_slots()
+    # print(old_capacity)
+    # ht.resize(ht.capacity * 2)
+    # new_capacity = ht.get_num_slots()
+    # print(new_capacity)
 
-#     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-#     # Test if data intact after resizing
-#     for i in range(1, 13):
-#         print(ht.get(f"line_{i}"))
+    # # Test if data intact after resizing
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
 
-#     print("")
+    print("")
