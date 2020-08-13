@@ -73,7 +73,7 @@ class HashTable:
         # Your code here
         hash = 5381
         for char in key:
-            hash = (( hash << 5) + hash) + ord(char)
+            hash = (( hash << 5 ) + hash) + ord(char)
         return hash & 0xFFFFFFFF
 
 
@@ -103,25 +103,27 @@ class HashTable:
         # Day 2
         index = self.hash_index(key)
         current = self.hash_table[index]
-        # If a key already exists,
-        if current != None:
-            print(current)
-            # if the key is equal to the key passed:
-            while current.next != None:
-                if current.key == key:
-                    # replace the value
-                    current.value = value
-                    return current.value
-                else:
-                    current = current.next
-            # Create a new node and place it after the current node
-            current.next = HashTableEntry(key, value)
-        # Else,
-        else:
-            # Add new HashTableEntry to the head of the Linked List
-            current = HashTableEntry(key, value)
         
-        return current.value
+        if current == None:
+            self.hash_table[index] = HashTableEntry(key, value)
+            return self.hash_table[index].value
+
+        if current.key == key:
+            # replace the value
+            current.value = value
+            return current.value
+        
+        while current != None:
+            # if the key is equal to the key passed:
+            if current.next == None:
+                # Create a new node and place it after the current node
+                current.next = HashTableEntry(key, value)
+                return current.next
+            elif current.next != None and current.next.key == key:
+                current.next.value = value
+                return current.next.value
+            else:
+                current = current.next
 
 
     def delete(self, key):
@@ -161,19 +163,28 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        # print(index)
         current = self.hash_table[index]
 
+        # if the item at the current index is None, return None
         if current == None:
-            return False
+            return None
+        # else if the current item's key is equal to the key passed,
         elif current.key == key:
-            return current.key
+            # we've found our key, so return the value!
+            return current.value
+        # else if the current is not None,
         elif current != None:
-            while current.next != None:
+            # loop as long as the current's next is not None
+            while current != None:
+                # at each loop, check if the current item matches the key we passed
                 if current.key == key:
-                    return current.key
+                    # if it does, return the value
+                    return current.value
+                # otherwise
                 else:
+                    #set the current variable to it's next node, and loop again
                     current = current.next
+
 
 
     def resize(self, new_capacity):
@@ -191,24 +202,56 @@ class HashTable:
 if __name__ == "__main__":
     ht = HashTable(8)
 
-    ht.put("line_1", "'Twas brillig, and the slithy toves")
-    ht.put("line_2", "Did gyre and gimble in the wabe:")
-    ht.put("line_3", "All mimsy were the borogoves,")
-    ht.put("line_4", "And the mome raths outgrabe.")
-    ht.put("line_5", '"Beware the Jabberwock, my son!')
-    ht.put("line_6", "The jaws that bite, the claws that catch!")
-    ht.put("line_7", "Beware the Jubjub bird, and shun")
-    ht.put("line_8", 'The frumious Bandersnatch!"')
-    ht.put("line_9", "He took his vorpal sword in hand;")
-    ht.put("line_10", "Long time the manxome foe he sought--")
-    ht.put("line_11", "So rested he by the Tumtum tree")
-    ht.put("line_12", "And stood awhile in thought.")
+    # ht.put("line_1", "'Twas brillig, and the slithy toves")
+    # ht.put("line_2", "Did gyre and gimble in the wabe:")
+    # ht.put("line_3", "All mimsy were the borogoves,")
+    # ht.put("line_4", "And the mome raths outgrabe.")
+    # ht.put("line_5", '"Beware the Jabberwock, my son!')
+    # ht.put("line_6", "The jaws that bite, the claws that catch!")
+    # ht.put("line_7", "Beware the Jubjub bird, and shun")
+    # ht.put("line_8", 'The frumious Bandersnatch!"')
+    # ht.put("line_9", "He took his vorpal sword in hand;")
+    # ht.put("line_10", "Long time the manxome foe he sought--")
+    # ht.put("line_11", "So rested he by the Tumtum tree")
+    # ht.put("line_12", "And stood awhile in thought.")
+
+    ht.put("key-0", "val-0")
+    ht.put("key-1", "val-1")
+    ht.put("key-2", "val-2")
+    ht.put("key-3", "val-3")
+    ht.put("key-4", "val-4")
+    ht.put("key-5", "val-5")
+    ht.put("key-6", "val-6")
+    ht.put("key-7", "val-7")
+    ht.put("key-8", "val-8")
+    ht.put("key-9", "val-9")
+
+    ht.put("key-0", "new-val-0")
+    ht.put("key-1", "new-val-1")
+    ht.put("key-2", "new-val-2")
+    ht.put("key-3", "new-val-3")
+    ht.put("key-4", "new-val-4")
+    ht.put("key-5", "new-val-5")
+    ht.put("key-6", "new-val-6")
+    ht.put("key-7", "new-val-7")
+    ht.put("key-8", "new-val-8")
+    ht.put("key-9", "new-val-9")
+
+    # print(ht.get('line_1'))
 
     # print("")
 
     # # Test storing beyond capacity
-    for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
+    
+    for i in ht.hash_table:
+        if i.next is not None:
+            print('i.next  ', i.next.value)
+        if i is not None:
+            print('i       ', i.value)
+        if i is None:
+            print('None')
 
     # # Test resizing
     # old_capacity = ht.get_num_slots()
